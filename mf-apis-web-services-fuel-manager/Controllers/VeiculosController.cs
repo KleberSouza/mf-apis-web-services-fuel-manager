@@ -1,10 +1,12 @@
 ﻿using mf_apis_web_services_fuel_manager.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace mf_apis_web_services_fuel_manager.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class VeiculosController : ControllerBase
@@ -16,6 +18,7 @@ namespace mf_apis_web_services_fuel_manager.Controllers
             _context = context;
         }
 
+        [Authorize(Roles ="Usuario")]
         [HttpGet]
         public async Task<ActionResult> GetAll()
         {
@@ -23,6 +26,7 @@ namespace mf_apis_web_services_fuel_manager.Controllers
             return Ok(model);
         }
 
+        [Authorize(Roles = "Administrador,Usuario")]
         [HttpPost]
         public async Task<ActionResult> Create(Veiculo model)
         {
@@ -37,6 +41,7 @@ namespace mf_apis_web_services_fuel_manager.Controllers
             return CreatedAtAction("GetById", new { id = model.Id }, model);
         }
 
+        [Authorize(Roles = "Administrador")]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetById(int id)
         {
